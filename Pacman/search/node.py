@@ -15,10 +15,11 @@ class Node:
 		pass
 
 	def __str__(self):
-		if self.parent == None:
+		if self.parent == None: #para prevenir el error del padre = null en el estado inicial
 			id = None
 		else:
 			id	= self.parent.ID
+
 		return str(self.ID) + " " + str(self.state)+ " " + str(id) + " " + str(self.action) + " " + str(self.pathcost)
 
 
