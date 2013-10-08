@@ -14,6 +14,10 @@ class Node:
 		Node.ID = Node.ID + 1
 		pass
 
+	def path(self):
+		# return [s,w,n] acciones que se han ejecutado hasta el nodo 
+		pass
+
 	def __str__(self):
 		if self.parent == None: #para prevenir el error del padre = null en el estado inicial
 			id = None
