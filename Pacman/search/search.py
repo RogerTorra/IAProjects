@@ -19,6 +19,7 @@ by Pacman agents (in searchAgents.py).
 """
 
 import util
+import sys
 
 class SearchProblem:
     """
@@ -89,6 +90,27 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
+
+    fringe = [problem.getStartState()] #iniciamos la frontera con el estado inicial
+
+    print "Start:", problem.getStartState()
+
+    while True:
+        if len(fringe) == 0:
+            sys.exit('failure')
+        n = fringe.pop(-1)
+        if problem.isGoalState(n):
+            print n
+            sys.exit('Solution')
+        for state,action,cost in problem.getSuccessors(n):
+            print action , " -> " , state
+            fringe.append(state)
+
+
+
+    #print "Is the (1,1) a goal?", problem.isGoalState((1,1))
+    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
