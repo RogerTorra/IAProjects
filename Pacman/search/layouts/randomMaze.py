@@ -28,7 +28,10 @@ if __name__ == "__main__":
 	matrix.append(['%']*rx)	
 	matrix[ry-2][1] = "."
 	matrix[1][rx-2] = "P"
+
+	f = open("hola.lay","w")
+
 	for row in matrix:
-		print "".join(row)
-	
+		print >>f, "".join(row)
+	f.close()
 	pass
