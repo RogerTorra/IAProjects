@@ -16,6 +16,8 @@ class Node:
 
 	def path(self):
 		# return [s,w,n] acciones que se han ejecutado hasta el nodo 
+		for parent in problem.getSuccessors(self):
+            print parent
 		pass
 
 	def __str__(self):
