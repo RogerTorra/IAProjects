@@ -20,6 +20,7 @@ by Pacman agents (in searchAgents.py).
 
 import util
 import sys
+import node
 
 class SearchProblem:
     """
@@ -91,20 +92,24 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    fringe = [problem.getStartState()] #iniciamos la frontera con el estado inicial
-
+    fringe = [node.Node(problem.getStartState(),None,None,0)] #iniciamos la frontera con el estado inicial
+    expand = {}
     print "Start:", problem.getStartState()
 
     while True:
         if len(fringe) == 0:
-            sys.exit('failure')
-        n = fringe.pop(-1)
-        if problem.isGoalState(n):
-            print n
-            sys.exit('Solution')
-        for state,action,cost in problem.getSuccessors(n):
-            print action , " -> " , state
-            fringe.append(state)
+            sys.exit('No solution')
+
+        n = fringe.pop(0)
+        expand[n.state] = n
+        if problem.isGoalState(n.state):
+            #print n.path
+            #sys.exit('Solution')
+            return  n.path()
+        for state,action,cost in problem.getSuccessors(n.state):
+            #print action , " -> " , state
+            if state not in expand:
+                fringe.append(node.Node(state, n,action, n.pathcost + cost))
 
 
 

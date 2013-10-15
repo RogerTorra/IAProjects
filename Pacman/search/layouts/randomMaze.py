@@ -3,7 +3,7 @@ import random
 import sys
 
 if __name__ == "__main__":	
-	random.seed( int(sys.argv[1]) )
+	random.seed( int(sys.argv[4]) )
 	#for i in range(random.randint(5,10)):
 		#print "%"
 	#	for i in range(random.randint(5,10)):
@@ -11,9 +11,11 @@ if __name__ == "__main__":
 
 	#for i in range(10):
 	#	print random.choice((1,20,33,4))
-	rx = random.randint(5,25)
-	ry = random.randint(5,25)
-	pw = float(sys.argv[2])
+	#rx = random.randint(5,25)
+	#ry = random.randint(5,25)
+	rx = int(sys.argv[1])
+	ry = int(sys.argv[2])
+	pw = float(sys.argv[3])
 	matrix = []
 	matrix.append(['%']*rx)
 	for x in range(ry-2):
