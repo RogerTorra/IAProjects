@@ -16,9 +16,14 @@ class Node:
 
 	def path(self):
 		# return [s,w,n] acciones que se han ejecutado hasta el nodo 
-		for parent in problem.getSuccessors(self):
-            print parent
-		pass
+		stack = []
+		node = self
+		while node.parent != None:
+			stack.append(node.action)
+			node = node.parent
+		stack.reverse()
+		
+		return stack
 
 	def __str__(self):
 		if self.parent == None: #para prevenir el error del padre = null en el estado inicial
@@ -34,4 +39,4 @@ if __name__ == "__main__": #test unitario
 	n2 = Node((5,4), n, 'South', 1)
 	n3 = Node((4,4), n2, 'West', 2)
 	n4 = Node((4,5), n3, 'Nord', 3)
-	print n
+	print n4.path()
