@@ -123,6 +123,26 @@ def breadthFirstSearch(problem):
     Search the shallowest nodes in the search tree first.
     """
     "*** YOUR CODE HERE ***"
+
+    fringe = [node.Node(problem.getStartState(),None,None,0)] #iniciamos la frontera con el estado inicial
+    expand = {}
+    print "Start:", problem.getStartState()
+
+    while True:
+        if len(fringe) == 0:
+            sys.exit('No solution')
+
+        n = fringe.pop(0)
+        expand[n.state] = n
+        if problem.isGoalState(n.state):
+            #print n.path
+            #sys.exit('Solution')
+            return  n.path()
+        for state,action,cost in problem.getSuccessors(n.state):
+            #print action , " -> " , state
+            if state not in expand:
+                fringe.append(node.Node(state, n,action, n.pathcost + cost))
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
