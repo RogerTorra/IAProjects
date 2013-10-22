@@ -119,11 +119,10 @@ def breadthFirstSearch(problem):
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
 
     util.raiseNotDefined()
-
+"""
 def depthFirstSearch(problem):
-    """
-    Search the shallowest nodes in the search tree first.
-    """
+
+   
     "*** YOUR CODE HERE ***"
 
     fringe = util.Stack() #usamos la clase pila en util
@@ -149,7 +148,7 @@ def depthFirstSearch(problem):
                 expanded[state] = ['F',ns]
 
     util.raiseNotDefined()
-
+"""
 def uniformCostSearch2(problem):
     "Search the node of least total cost first. "
     "*** YOUR CODE HERE ***"
