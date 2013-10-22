@@ -92,26 +92,28 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    fringe = [node.Node(problem.getStartState(),None,None,0)] #iniciamos la frontera con el estado inicial
-    expand = {}
+    #fringe = [node.Node(problem.getStartState(),None,None,0)] #iniciamos la frontera con el estado inicial
+    fringe = util.Queue() #usamos la clase cola en util
+    fringe.push(node.Node(problem.getStartState(),None,None,0))
+    expanded = {}
     print "Start:", problem.getStartState()
 
     while True:
-        if len(fringe) == 0:
+        if fringe.isEmpty():
             sys.exit('No solution')
 
-        n = fringe.pop(0)
-        expand[n.state] = n
+        n = fringe.pop()
+        expanded[n.state] = ['E',n]
         if problem.isGoalState(n.state):
             #print n.path
             #sys.exit('Solution')
             return  n.path()
         for state,action,cost in problem.getSuccessors(n.state):
             #print action , " -> " , state
-            if state not in expand:
-                fringe.append(node.Node(state, n,action, n.pathcost + cost))
-
-
+            if state not in expanded:
+                ns = node.Node(state, n,action, n.pathcost + cost)
+                fringe.push(ns)
+                expanded[state] = ['F',ns]
 
     #print "Is the (1,1) a goal?", problem.isGoalState((1,1))
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
@@ -124,24 +126,27 @@ def breadthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    fringe = [node.Node(problem.getStartState(),None,None,0)] #iniciamos la frontera con el estado inicial
-    expand = {}
+    fringe = util.Stack() #usamos la clase pila en util
+    fringe.push(node.Node(problem.getStartState(),None,None,0))
+    expanded = {}
     print "Start:", problem.getStartState()
 
     while True:
-        if len(fringe) == 0:
+        if fringe.isEmpty():
             sys.exit('No solution')
 
-        n = fringe.pop(0)
-        expand[n.state] = n
+        n = fringe.pop()
+        expanded[n.state] = ['E',n]
         if problem.isGoalState(n.state):
             #print n.path
             #sys.exit('Solution')
             return  n.path()
         for state,action,cost in problem.getSuccessors(n.state):
             #print action , " -> " , state
-            if state not in expand:
-                fringe.append(node.Node(state, n,action, n.pathcost + cost))
+            if state not in expanded:
+                ns = node.Node(state, n,action, n.pathcost + cost)
+                fringe.push(ns)
+                expanded[state] = ['F',ns]
 
     util.raiseNotDefined()
 
