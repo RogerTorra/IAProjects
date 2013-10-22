@@ -94,7 +94,7 @@ def breadthFirstSearch(problem):
 
     #fringe = [node.Node(problem.getStartState(),None,None,0)] #iniciamos la frontera con el estado inicial
     fringe = util.Queue() #usamos la clase cola en util
-    fringe.push(node.Node(problem.getStartState(),None,None,0))
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0))
     expanded = {}
     print "Start:", problem.getStartState()
 
@@ -111,7 +111,7 @@ def breadthFirstSearch(problem):
         for state,action,cost in problem.getSuccessors(n.state):
             #print action , " -> " , state
             if state not in expanded:
-                ns = node.Node(state, n,action, n.pathcost + cost)
+                ns = node.Node(state, n,action, n.pathcost + cost, n.depth + 1)
                 fringe.push(ns)
                 expanded[state] = ['F',ns]
 
@@ -119,14 +119,14 @@ def breadthFirstSearch(problem):
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
 
     util.raiseNotDefined()
-"""
+
 def depthFirstSearch(problem):
 
    
     "*** YOUR CODE HERE ***"
 
     fringe = util.Stack() #usamos la clase pila en util
-    fringe.push(node.Node(problem.getStartState(),None,None,0))
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0))
     expanded = {}
     print "Start:", problem.getStartState()
 
@@ -143,14 +143,14 @@ def depthFirstSearch(problem):
         for state,action,cost in problem.getSuccessors(n.state):
             #print action , " -> " , state
             if state not in expanded:
-                ns = node.Node(state, n,action, n.pathcost + cost)
+                ns = node.Node(state, n,action, n.pathcost + cost, n.depth + 1)
                 fringe.push(ns)
                 expanded[state] = ['F',ns]
 
     util.raiseNotDefined()
 """
 def uniformCostSearch2(problem):
-    "Search the node of least total cost first. "
+
     "*** YOUR CODE HERE ***"
     fringe = util.PriorityQueue() #usamos la clase cola con prioridad en util
     fringe.push(node.Node(problem.getStartState(),None,None,0),0) #con coste 0
@@ -181,12 +181,12 @@ def uniformCostSearch2(problem):
            # else if ns with n.pathcost not in fringe
 
     util.raiseNotDefined()
-
+"""
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
     "*** YOUR CODE HERE ***"
     fringe = util.PriorityQueue() #usamos la clase cola con prioridad en util
-    fringe.push(node.Node(problem.getStartState(),None,None,0),0) #con coste 0
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0),0) #con coste 0
     expanded = {}
     print "Start:", problem.getStartState()
 
@@ -203,7 +203,7 @@ def uniformCostSearch(problem):
         for state,action,cost in problem.getSuccessors(n.state):
             #print action , " -> " , state
             if state not in expanded:
-                ns = node.Node(state, n,action, n.pathcost + cost)
+                ns = node.Node(state, n,action, n.pathcost + cost , n.depth +1)
                 fringe.push(ns, n.pathcost)
                 expanded[state] = ['F',ns]
            # else if ns with n.pathcost not in fringe
@@ -222,9 +222,38 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+def limitedDFS(problem , k = 10):
+    fringe = util.Stack() #usamos la clase pila en util
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0,0))
+    expanded = {}
+    cut = false
+    print "Start:", problem.getStartState()
+
+    while True:
+        if fringe.isEmpty():
+            if cut: return 'cutoff' 
+            else: return 'No solution'
+        n = fringe.pop()
+        expanded[n.state] = ['E',n]
+        if n.depth = k:
+            cut = true
+        if problem.isGoalState(n.state):
+            #print n.path
+            #sys.exit('Solution')
+            return  n.path()
+        for state,action,cost in problem.getSuccessors(n.state):
+            #print action , " -> " , state
+            if state not in expanded:
+                ns = node.Node(state, n,action, n.pathcost + cost, n.depth+1)
+                fringe.push(ns)
+                expanded[state] = ['F',ns]
+
+    util.raiseNotDefined()
+
 
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+ldf = limitedDFS
