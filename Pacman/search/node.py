@@ -4,12 +4,13 @@ class Node:
 
 	ID = 0
 
-	def __init__(self, state, parent, action, pathcost): #constructor
+	def __init__(self, state, parent, action, pathcost, profundity): #constructor
 		#print state, parent, action, pathcost
 		self.state = state
 		self.parent = parent
 		self.action = action
 		self.pathcost = pathcost
+		self.profundity = profundity
 		self.ID = Node.ID
 		Node.ID = Node.ID + 1
 		pass
@@ -31,7 +32,7 @@ class Node:
 		else:
 			id	= self.parent.ID
 
-		return str(self.ID) + " " + str(self.state)+ " " + str(id) + " " + str(self.action) + " " + str(self.pathcost)
+		return str(self.ID) + " " + str(self.state)+ " " + str(id) + " " + str(self.action) + " " + str(self.pathcost) + " " + str(self.profundity)
 
 
 if __name__ == "__main__": #test unitario
