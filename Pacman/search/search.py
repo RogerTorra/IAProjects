@@ -256,7 +256,8 @@ def greedyBFS(problem):
             return  n.path()
         for state,action,cost in problem.getSuccessors(n.state):
             if state not in expanded:
-                ns = node.Node(state, n,action, n.pathcost + cost , n.depth +1)
+                h = util.manhattanDistance(state, problem.goal)
+                ns = node.Node(state, n,action, n.pathcost + h , n.depth +1)
                 fringe.push(ns, n.pathcost)
                 expanded[state] = ['F',ns]
 
