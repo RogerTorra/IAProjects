@@ -21,6 +21,7 @@ by Pacman agents (in searchAgents.py).
 import util
 import sys
 import node
+import time
 
 class SearchProblem:
     """
@@ -93,6 +94,7 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
 
     #fringe = [node.Node(problem.getStartState(),None,None,0)] #iniciamos la frontera con el estado inicial
+    start = time.clock()
     fringe = util.Queue() #usamos la clase cola en util
     fringe.push(node.Node(problem.getStartState(),None,None,0,0))
     expanded = {}
@@ -101,30 +103,40 @@ def breadthFirstSearch(problem):
     while True:
         if fringe.isEmpty():
             sys.exit('No solution')
-
         n = fringe.pop()
         expanded[n.state] = ['E',n]
         if problem.isGoalState(n.state):
-            #print n.path
-            #sys.exit('Solution')
+            print "TIME:", (time.clock() - start)
             return  n.path()
         for state,action,cost in problem.getSuccessors(n.state):
-            #print action , " -> " , state
             if state not in expanded:
                 ns = node.Node(state, n,action, n.pathcost + cost, n.depth + 1)
                 fringe.push(ns)
                 expanded[state] = ['F',ns]
 
-    #print "Is the (1,1) a goal?", problem.isGoalState((1,1))
-    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
-
+def breadthFirstSearchTree(problem):
+    start = time.clock()
+    fringe = util.Queue() #usamos la clase cola en util
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0))
+    print "Start:", problem.getStartState()
+    while True:
+        if fringe.isEmpty():
+            sys.exit('No solution')
+        n = fringe.pop()
+        if problem.isGoalState(n.state):
+            print "TIME:", (time.clock() - start)
+            return  n.path()
+        for state,action,cost in problem.getSuccessors(n.state):
+            ns = node.Node(state, n,action, n.pathcost + cost, n.depth + 1)
+            fringe.push(ns)
     util.raiseNotDefined()
+
 
 def depthFirstSearch(problem):
 
    
     "*** YOUR CODE HERE ***"
-
+    start = time.clock()
     fringe = util.Stack() #usamos la clase pila en util
     fringe.push(node.Node(problem.getStartState(),None,None,0,0))
     expanded = {}
@@ -139,6 +151,7 @@ def depthFirstSearch(problem):
         if problem.isGoalState(n.state):
             #print n.path
             #sys.exit('Solution')
+            print "TIME:", (time.clock() - start)
             return  n.path()
         for state,action,cost in problem.getSuccessors(n.state):
             #print action , " -> " , state
@@ -146,6 +159,31 @@ def depthFirstSearch(problem):
                 ns = node.Node(state, n,action, n.pathcost + cost, n.depth + 1)
                 fringe.push(ns)
                 expanded[state] = ['F',ns]
+
+    util.raiseNotDefined()
+
+
+def depthFirstSearchTree(problem):
+
+   
+    "*** YOUR CODE HERE ***"
+    start = time.clock()
+    fringe = util.Stack() #usamos la clase pila en util
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0))
+    print "Start:", problem.getStartState()
+    while True:
+        if fringe.isEmpty():
+            sys.exit('No solution')
+        n = fringe.pop()
+        if problem.isGoalState(n.state):
+            #print n.path
+            #sys.exit('Solution')
+            print "TIME:", (time.clock() - start)
+            return  n.path()
+        for state,action,cost in problem.getSuccessors(n.state):
+            #print action , " -> " , state
+            ns = node.Node(state, n,action, n.pathcost + cost, n.depth + 1)
+            fringe.push(ns)
 
     util.raiseNotDefined()
 """
@@ -185,6 +223,7 @@ def uniformCostSearch2(problem):
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
     "*** YOUR CODE HERE ***"
+    start = time.clock()
     fringe = util.PriorityQueue() #usamos la clase cola con prioridad en util
     fringe.push(node.Node(problem.getStartState(),None,None,0,0),0) #con coste 0
     expanded = {}
@@ -193,20 +232,16 @@ def uniformCostSearch(problem):
     while True:
         if fringe.isEmpty():
             sys.exit('No solution')
-
         n = fringe.pop()
         expanded[n.state] = ['E',n]
         if problem.isGoalState(n.state):
-            #print n.path
-            #sys.exit('Solution')
+            print "TIME:", (time.clock() - start)
             return  n.path()
         for state,action,cost in problem.getSuccessors(n.state):
-            #print action , " -> " , state
             if state not in expanded:
                 ns = node.Node(state, n,action, n.pathcost + cost , n.depth +1)
                 fringe.push(ns, n.pathcost)
                 expanded[state] = ['F',ns]
-           # else if ns with n.pathcost not in fringe
 
     util.raiseNotDefined()
 
@@ -217,32 +252,63 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
-def aStarSearch(problem, heuristic=nullHeuristic):
+def manhattanDistance( xy1, xy2 ):
+    "Returns the Manhattan distance between points xy1 and xy2"
+    return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
+
+def euclidean( xy1, xy2 ):
+    "The Euclidean distance heuristic for a PositionSearchProblem"
+    return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
+
+def aStarSearch(problem, heuristic):
     "Search the node that has the lowest combined cost and heuristic first."
     "*** YOUR CODE HERE ***"
+    start = time.clock()
+    fringe = util.PriorityQueue() #usamos la clase cola con prioridad en util
+    print "Start: ", problem.getStartState()
+    print "Finish: ", problem.goal
+    h = heuristic(problem.getStartState(), problem.goal)
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0),h) #con coste h(n)
+    expanded = {}  
+    while True:
+        if fringe.isEmpty():
+            sys.exit('No solution')
+        n = fringe.pop()
+        expanded[n.state] = ['E',n]
+        if problem.isGoalState(n.state):
+            print "TIME:", (time.clock() - start)
+            return  n.path()
+        for state,action,cost in problem.getSuccessors(n.state):
+            if state not in expanded:
+                h = heuristic(state, problem.goal)
+                ns = node.Node(state, n,action, n.pathcost + h , n.depth +1)
+                fringe.push(ns, n.pathcost)
+                expanded[state] = ['F',ns]
+    
+    
+
     util.raiseNotDefined()
 
-def limitedDFS(problem , k = 10):
+def limitedDS(problem,k):
     fringe = util.Stack() #usamos la clase pila en util
-    fringe.push(node.Node(problem.getStartState(),None,None,0,0,0))
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0))
     expanded = {}
-    cut = false
+    cut = False
     print "Start:", problem.getStartState()
-
+   
+    print "K :",k
     while True:
         if fringe.isEmpty():
             if cut: return 'cutoff' 
             else: return 'No solution'
         n = fringe.pop()
         expanded[n.state] = ['E',n]
-        if n.depth = k:
-            cut = true
+        if n.depth == k:
+            cut = True
         if problem.isGoalState(n.state):
-            #print n.path
-            #sys.exit('Solution')
+            
             return  n.path()
         for state,action,cost in problem.getSuccessors(n.state):
-            #print action , " -> " , state
             if state not in expanded:
                 ns = node.Node(state, n,action, n.pathcost + cost, n.depth+1)
                 fringe.push(ns)
@@ -250,10 +316,53 @@ def limitedDFS(problem , k = 10):
 
     util.raiseNotDefined()
 
+def iterativeDS(problem):
+    start = time.clock()
+    k = problem.getStartState()[0] * problem.getStartState()[1]
+    for i in range(0,k):
+        result = limitedDS(problem,k)
+        if result is not 'cutoff':
+            print "TIME:", (time.clock() - start)
+            return result
+
+def greedyBFS(problem):
+    "Search the node of least total cost first. "
+    "*** YOUR CODE HERE ***"
+    start = time.clock()
+    fringe = util.PriorityQueue() #usamos la clase cola con prioridad en util
+    print "Start:", problem.getStartState()
+    print "Finish:", problem.goal
+    h = util.manhattanDistance(problem.getStartState(), problem.goal)
+    fringe.push(node.Node(problem.getStartState(),None,None,0,0),h) #con coste h(n)
+    expanded = {}  
+    while True:
+        if fringe.isEmpty():
+            sys.exit('No solution')
+        n = fringe.pop()
+        expanded[n.state] = ['E',n]
+        if problem.isGoalState(n.state):
+            print "TIME:", (time.clock() - start)
+            return  n.path()
+        for state,action,cost in problem.getSuccessors(n.state):
+            if state not in expanded:
+                h = util.manhattanDistance(state, problem.goal)
+                ns = node.Node(state, n,action, n.pathcost + h + cost, n.depth +1)
+                fringe.push(ns, n.pathcost)
+                expanded[state] = ['F',ns]
+
+    util.raiseNotDefined()
 
 # Abbreviations
 bfs = breadthFirstSearch
+bfst = breadthFirstSearchTree
 dfs = depthFirstSearch
+dfst = depthFirstSearchTree
 astar = aStarSearch
 ucs = uniformCostSearch
-ldf = limitedDFS
+lds = limitedDS
+ids = iterativeDS
+gbfs = greedyBFS
+
+if __name__ == "__main__": #test unitario
+
+    greedyBFS (mediumMaze)
