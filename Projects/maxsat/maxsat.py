@@ -14,18 +14,18 @@ class maxsat:
 	def toSat(self, fname):
 		f = open(fname, "w")
 		#header
-		print "p cnf", self.nvar, len(self.soft) + len(self.hard)
+		print >> f,"p cnf", self.nvar, len(self.soft) + len(self.hard)
 
 		#soft
 		for c, w in self.soft:
 			for lit in c:
-				print lit,
-			print "0"
+				print >> f,lit,
+			print >> f,"0"
 
 		#hard
 		for c, w in self.hard:
 			for lit in c:
-				print lit,
-			print "0"
+				print >> f,lit,
+			print >> f,"0"
 		f.close()
 
