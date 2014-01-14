@@ -22,8 +22,8 @@ class Graph:
 		f = open("instance.wcnf", "w")
 		
 		T = len(self.nodes) + 1
-		E = ( len(self.nodes) * (len(self.nodes)-1) ) / 2
-		print >> f,'p wcnf',len(self.nodes),len(self.nodes) + (E - len(self.edges)), T
+		#E = ( len(self.nodes) * (len(self.nodes)-1) ) / 2
+		print >> f,'p wcnf',len(self.nodes),len(self.nodes) + (2 * len(self.edges)), T
 
 		for n in self.nodes:
 			print >> f,1, n ,0
@@ -31,10 +31,9 @@ class Graph:
 		for i in range(len(self.nodes) - 1):
 			for j in range(i+1, len(self.nodes)):
 				complete.append([self.nodes[i] , self.nodes[j]])
-		for e1,e2 in complete:
-			if [e1,e2] not in self.edges:
-				if [e2,e1] not in self.edges:
-					print >> f,T, -e1, -e2 ,0
+		for e1,e2 in self.edges:
+			print >> f,1, e1, e2 ,0
+			print >> f,1, -e1, -e2 ,0
 		f.close()
 
 	def solution(self,output):

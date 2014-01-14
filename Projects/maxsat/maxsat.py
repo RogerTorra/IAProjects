@@ -4,7 +4,7 @@ class MaxSAT:
         self.soft = []
         self.hard = []
         self.infinit = -1
-	    self.nvar = 0
+        self.nvar = 0
 
     def read(self, fname):
         f = open(fname, "r")
@@ -12,8 +12,10 @@ class MaxSAT:
             l = line.split()
             if l[0] != 'c':
                 if l[0] == 'p':
-                    infinit = l[4]
-		    self.nvar = int(l[2])
+                    infinit = l[3]
+                    print "max:", infinit
+                    self.nvar = int(l[2])
+                    print "nvar:", self.nvar
                 elif l[0] == infinit:
                     self.hard.append([int(c) for c in l[1:-1]])
                 else:
@@ -55,4 +57,4 @@ class MaxSAT:
 if __name__ == "__main__":
     sat = MaxSAT()
     sat.read(sys.argv[1])
-    sat.tosat("prueba.cnf")
+    #sat.tosat("../picosat-951/prueba.cnf")
