@@ -19,10 +19,8 @@ class MaxSAT:
                     self.nvar = int(l[2])
                 elif l[0] == infinit:
                     self.hard.append([int(c) for c in l[1:-1]])
-                    print "hard: ", [int(c) for c in l[1:-1]]
                 else:
                     self.soft.append(([int(c) for c in l[1:-1]], int(l[0])))
-                    print "soft: ", ([int(c) for c in l[1:-1]], int(l[0]))
         f.close()
 
     def alo(self, lits):
@@ -35,8 +33,8 @@ class MaxSAT:
     def eo(self, lits):
         self.alo(lits)
         self.amo(lits)
-        print "Soft: ", self.soft
-        print "Hard: ", self.hard
+        #print "Soft: ", self.soft
+        #print "Hard: ", self.hard
 
 
     
@@ -114,23 +112,55 @@ class MaxSAT:
             self.soft[pos] = first
         return rel
 
+    def solver(self,core,file,cnf):
+        s=0
+        while True:
+            sat.tosat('test/'+file+str(s)+cnf )
+            command = '../picosat-951/picosat -c ../maxsat/test/'+core+str(s)+cnf+ ' ../maxsat/test/'+file+str(s)+cnf   
+            output = os.popen(command).readlines()
+            for line in output:
+                l = line.split()
+                if l[0] == "s":
+                    print l[1]
+                    if l[1] is "SATISFACTIBLE":
+                        continue
+                        print "BREAK!!!"
+                        return 0
+            lits = sat.getLits('test/'+core+str(s)+cnf)
+            sat.eo(sat.relaxe(lits))
+            s = s +1
+
 if __name__ == "__main__":
 
-    coreFile = "core.cnf"
-    satFile = "file.cnf"
-
+    coreFile = "core"
+    satFile = "file"
+    cnf = ".cnf"
+    #command = './maxsatz2009 '+ sys.argv[1]    
+    #output = os.popen(command).readlines()
+    #for l in output:
+    #    print l
     sat = MaxSAT()
     sat.read(sys.argv[1])
 
-    sat.tosat(satFile)
-    command = '../picosat-951/picosat -c ../maxsat/core.cnf file.cnf'     
-    output = os.popen(command).readlines()
-    for l in output:
-        print l
-    lits = sat.getLits(coreFile)
-    sat.eo(sat.relaxe(lits))
-    sat.tosat("file.cnf")
-    command = '../picosat-951/picosat -c ../maxsat/core.cnf file.cnf'     
-    output = os.popen(command).readlines()
-    for l in output:
-        print l
+    #sat.solver(coreFile,satFile,cnf)
+
+    s=0
+    while True:
+        sat.tosat('test/'+satFile+str(s)+cnf )
+        command = '../picosat-951/picosat -c ../maxsat/test/'+coreFile+str(s)+cnf+ ' ../maxsat/test/'+satFile+str(s)+cnf   
+        output = os.popen(command).readlines()
+        for line in output:
+            l = line.split()
+            if l[0] == "s":
+                if l[1] == "SATISFIABLE":
+                    sys.exit("SATISFIABLE")
+        lits = sat.getLits('test/'+coreFile+str(s)+cnf)
+        sat.eo(sat.relaxe(lits))
+        s = s +1
+
+        #break
+        #sat.tosat("file.cnf")
+        #command = '../picosat-951/picosat -c ../maxsat/core.cnf file.cnf'     
+        #output = os.popen(command).readlines()
+        #for l in output:
+        #    print l
