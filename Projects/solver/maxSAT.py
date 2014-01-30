@@ -33,7 +33,11 @@ class MaxSAT:
     def eo(self, lits):
         self.alo(lits)
         self.amo(lits)
-  
+        #print "Soft: ", self.soft
+        #print "Hard: ", self.hard
+
+
+    
     def tosat(self, fname):
         aux = 500
         f = open(fname,"w")
@@ -56,8 +60,14 @@ class MaxSAT:
             print >>f, -aux , "0" 
             aux += 1 
         f.close()
+        
 
     def getLits(self,fname):
+        """
+        Metodo que lee el archivo generado por el picosat, para obtener las variables indicador 
+        leemos el archivo al revés y paramos cuando encontramos más de una variables por
+        linea.
+        """
         lines = []
         lits = []
         f = open(fname, "r")
@@ -66,7 +76,6 @@ class MaxSAT:
             lines.append(line)
         for line in reversed(lines):
             l = line.split()
-            #if l[0] != 'c':
             if len(l) > 2:
                 break
             else:
@@ -86,23 +95,6 @@ class MaxSAT:
             self.soft[pos] = first
         return rel
 
-    def solver(self,core,file,cnf):
-        s=0
-        while True:
-            sat.tosat('test/'+file+str(s)+cnf )
-            command = '../picosat-951/picosat -c ../maxsat/test/'+core+str(s)+cnf+ ' ../maxsat/test/'+file+str(s)+cnf   
-            output = os.popen(command).readlines()
-            for line in output:
-                l = line.split()
-                if l[0] == "s":
-                    print l[1]
-                    if l[1] is "SATISFACTIBLE":
-                        continue
-                        print "BREAK!!!"
-                        return 0
-            lits = sat.getLits('test/'+core+str(s)+cnf)
-            sat.eo(sat.relaxe(lits))
-            s = s +1
 
 if __name__ == "__main__":
 
@@ -116,16 +108,21 @@ if __name__ == "__main__":
     sat = MaxSAT()
     sat.read(sys.argv[1])
 
+    #sat.solver(coreFile,satFile,cnf)
+
     s=0
     while True:
         sat.tosat('test/'+satFile+str(s)+cnf )
-        command = '../picosat-951/picosat -c ../maxsat/test/'+coreFile+str(s)+cnf+ ' ../maxsat/test/'+satFile+str(s)+cnf   
+        command = 'picosat-951/picosat -c test/'+coreFile+str(s)+cnf+ ' test/'+satFile+str(s)+cnf   
         output = os.popen(command).readlines()
         for line in output:
             l = line.split()
+            print l
+            if l[0] == "o":
+                print l
             if l[0] == "s":
                 if l[1] == "SATISFIABLE":
-                    sys.exit("SATISFIABLE")
+                    sys.exit("END")
         lits = sat.getLits('test/'+coreFile+str(s)+cnf)
         sat.eo(sat.relaxe(lits))
         s = s +1

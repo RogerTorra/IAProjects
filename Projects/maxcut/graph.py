@@ -23,14 +23,7 @@ class Graph:
 		
 		T = len(self.nodes) + 1
 		#E = ( len(self.nodes) * (len(self.nodes)-1) ) / 2
-		print >> f,'p wcnf',len(self.nodes),len(self.nodes) + (2 * len(self.edges)), T
-
-		for n in self.nodes:
-			print >> f,1, n ,0
-		complete = []
-		for i in range(len(self.nodes) - 1):
-			for j in range(i+1, len(self.nodes)):
-				complete.append([self.nodes[i] , self.nodes[j]])
+		print >> f,'p wcnf',len(self.nodes),len(self.edges)*2, T
 		for e1,e2 in self.edges:
 			print >> f,1, e1, e2 ,0
 			print >> f,1, -e1, -e2 ,0
@@ -50,5 +43,3 @@ if __name__ == "__main__":
 		command = '../maxsat/maxsatz2009 instance.wcnf'		
 		output = os.popen(command).readlines()
 		g.solution(output)
-
-
