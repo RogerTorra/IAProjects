@@ -114,7 +114,7 @@ if __name__ == "__main__":
         for line in output:
             l = line.split()
             print l
-            if l[0] == "o":
+            if l[0] == "v":
                 print l
             if l[0] == "s":
                 if l[1] == "SATISFIABLE":
