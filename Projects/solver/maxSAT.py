@@ -63,11 +63,7 @@ class MaxSAT:
         
 
     def getLits(self,fname):
-        """
-        Metodo que lee el archivo generado por el picosat, para obtener las variables indicador 
-        leemos el archivo al revés y paramos cuando encontramos más de una variables por
-        linea.
-        """
+
         lines = []
         lits = []
         f = open(fname, "r")
